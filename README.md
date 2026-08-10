@@ -1,6 +1,8 @@
 # manipulative-language-detector
 
-Production internship project: Detection of manipulative linguistic patterns in fraudulent messages / Проект производственной практики: Обнаружение манипулятивных языковых паттернов в мошеннических сообщениях
+Production internship project: Detection of manipulative linguistic patterns in fraudulent messages
+
+Проект производственной практики: Обнаружение манипулятивных языковых паттернов в мошеннических сообщениях
 
 ------
 
@@ -25,14 +27,52 @@ Production internship project: Detection of manipulative linguistic patterns in 
 - `topic_shift_misrepresentation`
 - `directive_action_pressure`
 
+-----
+
+## Структура проекта
+
+- `data/` — директория с данными (корпус `ru_token_cls_dataset`).
+- `models/` — обученные модели (`manipulation_detector_model`).
+- `notebooks/` — ноутбуки для исследования, подготовки данных и обучения модели.
+- `src/` — исходный код ядра детектора.
+- `service/` — веб-сервис (`backend` и `frontend`).
+- `tests/` — автоматические тесты.
+- `docker-compose.yml` — конфигурация для контейнеризации.
+
+> Скачать обученную модель можно [по ссылке](https://disk.yandex.ru/d/k4SNvFgI6sdC8w) - ее нужно поместить в папку `models/`.
+
+-------
+
+## Запуск сервиса
+
+Проект упакован в Docker и состоит из двух сервисов: backend и frontend.
+
+1. Убедитесь, что обученная модель находится в папке `models/`.
+2. Для сборки и запуска выполните в корне проекта:
+
+```bash
+docker-compose up --build
+```
+-------
+
+## Тестирование
+
+Проект содержит автоматические модульные тесты на компоненты подготовки данных, функции потерь, метрики и инференс.
+
+Для запуска тестов в локальном окружении выполните:
+
+```bash
+pytest tests/
+```
+
 ---------
 
 ## Архитектура
 
-Проект состоит из двух основных этапов:
+Проект состоит из трех этапов:
 
 ### 1. Подготовка данных
-В ноутбуке `src/prepare_ru_manipulation_token_cls.ipynb`:
+В ноутбуке `notebooks/prepare_ru_manipulation_token_cls.ipynb`:
 - загружается англоязычный корпус;
 - выполняется перевод и фильтрация;
 - загружается и обрабатывается русский корпус;
@@ -40,21 +80,15 @@ Production internship project: Detection of manipulative linguistic patterns in 
 - сохраняется итоговый датасет для обучения.
 
 ### 2. Обучение и использование модели
-В ноутбуке `src/model-train.ipynb`:
+В ноутбуке `notebooks/model-train.ipynb`:
 - загружается подготовленный датасет;
 - выполняется разбиение на обучающую и тестовую выборки;
 - обучается модель token classification;
-- сохраняется обученная модель в папку `manipulation_detector_model`;
+- сохраняется обученная модель в папку `models/manipulation_detector_model`;
 - выполняется тестирование модели на примерах.
 
+### 3. Сервис и тестирование
+- Реализован веб-сервис, состоящий из REST API (backend) и пользовательского интерфейса (frontend).
+- Написаны модульные тесты на основные компоненты системы (подготовка данных, лоссы, метрики, предиктор).
+
 > Подробнее о работе проекта можно прочитать в отчете `reports.docx`.
----
-
-## Структура проекта
-
-- `ru_token_cls_dataset/` — объединенный корпус для обучения.
-- `src/` — ноутбуки и скрипты для подготовки данных, обучения и тестирования модели.
-- `manipulation_detector_model/` — обученная модель.
-- `processed_ru/` — промежуточные файлы после обработки русского корпуса.
-
-> Скачать обученную модель можно [ссылке](https://disk.yandex.ru/d/k4SNvFgI6sdC8w) - ее нужно поместить в корень проекта.
