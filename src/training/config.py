@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import os
 
 MODEL_NAME = "DeepPavlov/rubert-base-cased"
 
@@ -36,6 +36,13 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DATASET_PATH = REPO_ROOT / "data" / "ru_token_cls_dataset"
 MODEL_OUTPUT_DIR = REPO_ROOT / "models" / "manipulation_detector_model"
 CHECKPOINTS_DIR = REPO_ROOT / "models" / "rubert_multilabel_checkpoints"
+
+HF_MODEL_REPO_ID = "ksruasdh/manipulation-detector-ru"
+
+def get_model_source() -> str:
+    if os.getenv("MODEL_SOURCE", "hub") == "local":
+        return str(MODEL_OUTPUT_DIR)
+    return HF_MODEL_REPO_ID
 
 TRAINING_HYPERPARAMS = dict(
     num_train_epochs=15,

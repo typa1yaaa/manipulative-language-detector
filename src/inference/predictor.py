@@ -1,6 +1,7 @@
 from pathlib import Path
 import torch
 from transformers import AutoModelForTokenClassification, AutoTokenizer
+import os 
 
 from ..training import config
 
@@ -10,6 +11,8 @@ SPECIAL_TOKENS = {"[CLS]", "[SEP]", "[PAD]"}
 
 class ManipulationDetector:
     def __init__(self, model_path: str | Path, threshold: float = config.PREDICT_THRESHOLD):
+        model_path = model_path or config.get_model_source()
+
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModelForTokenClassification.from_pretrained(model_path)
         self.model.eval()
