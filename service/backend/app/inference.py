@@ -6,7 +6,7 @@ from src.training import config
 
 @lru_cache
 def get_detector() -> ManipulationDetector:
-    return ManipulationDetector(config.MODEL_OUTPUT_DIR)
+    return ManipulationDetector(config.get_model_source())
 
 
 def predict(text: str) -> dict:
