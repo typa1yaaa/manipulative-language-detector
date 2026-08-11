@@ -17,12 +17,19 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Install CPU PyTorch
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest torch datasets transformers huggingface_hub hf_transfer
-          pip install scikit-learn numpy fastapi "uvicorn[standard]" pydantic httpx pandas
+          pip install -r requirements.txt
 
       - name: Run fast tests
         run: pytest -m "not slow" -v
