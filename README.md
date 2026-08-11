@@ -1,7 +1,5 @@
 # manipulative-language-detector
 
-Production internship project: Detection of manipulative linguistic patterns in fraudulent messages
-
 Проект производственной практики: Обнаружение манипулятивных языковых паттернов в мошеннических сообщениях
 
 ------
@@ -32,32 +30,47 @@ Production internship project: Detection of manipulative linguistic patterns in 
 ## Структура проекта
 
 - `data/` — директория с данными (корпус `ru_token_cls_dataset`).
-- `models/` — обученные модели (`manipulation_detector_model`).
 - `notebooks/` — ноутбуки для исследования, подготовки данных и обучения модели.
-- `src/` — исходный код ядра детектора.
+- `src/` — исходный код основных функций модели.
 - `service/` — веб-сервис (`backend` и `frontend`).
 - `tests/` — автоматические тесты.
+- `.github/workflows/` — конфигурация CI (GitHub Actions).
 - `docker-compose.yml` — конфигурация для контейнеризации.
 
-> Скачать обученную модель можно [по ссылке](https://disk.yandex.ru/d/k4SNvFgI6sdC8w) - ее нужно поместить в папку `models/`.
+Обученная модель опубликована на [Hugging Face: `ksruasdh/manipulation-detector-ru`](https://huggingface.co/ksruasdh/manipulation-detector-ru).
 
+> Модель не нужно скачивать - она автоматически скачивается с Hugging Face и интегрируется в систему.
 -------
 
 ## Запуск сервиса
 
 Проект упакован в Docker и состоит из двух сервисов: backend и frontend.
 
-1. Убедитесь, что обученная модель находится в папке `models/`.
-2. Для сборки и запуска выполните в корне проекта:
+### Требования
+
+- Docker и Docker Compose (v2)
+
+### Команда запуска
+
+Для сборки и запуска выполните в корне проекта:
 
 ```bash
 docker-compose up --build
 ```
+
+После старта доступны:
+
+- **Backend API:** [http://localhost:8000](http://localhost:8000)
+- **Swagger-документация:** [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Пользовательский интерфейс:** [http://localhost:8501](http://localhost:8501)
+
 -------
 
 ## Тестирование
 
 Проект содержит автоматические модульные тесты на компоненты подготовки данных, функции потерь, метрики и инференс.
+
+### Локальный запуск
 
 Для запуска тестов в локальном окружении выполните:
 
@@ -65,7 +78,11 @@ docker-compose up --build
 pytest tests/
 ```
 
----------
+### CI
+
+В GitHub Actions тесты выполняются автоматически при любом **push в `main`** и при создании **pull request**. Также в CI проверяется сборка Docker-образов backend'а и frontend'а.
+
+---
 
 ## Архитектура
 
@@ -90,5 +107,6 @@ pytest tests/
 ### 3. Сервис и тестирование
 - Реализован веб-сервис, состоящий из REST API (backend) и пользовательского интерфейса (frontend).
 - Написаны модульные тесты на основные компоненты системы (подготовка данных, лоссы, метрики, предиктор).
+
 
 > Подробнее о работе проекта можно прочитать в отчете `reports.docx`.
