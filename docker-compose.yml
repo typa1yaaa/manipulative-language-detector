@@ -1,28 +1,6 @@
 services:
-  model-downloader:
-    build:
-      context: .
-      dockerfile: service/backend/Dockerfile
-
-    environment:
-      HF_HUB_DISABLE_XET: "1"
-      HF_HUB_DOWNLOAD_TIMEOUT: "600"
-      HF_HUB_ETAG_TIMEOUT: "60"
-
-    volumes:
-      - hf_cache:/root/.cache/huggingface
-
-    command:
-      [
-        "python",
-        "download_model.py"
-      ]
-
-
   backend:
-    build:
-      context: .
-      dockerfile: service/backend/Dockerfile
+    image: ghcr.io/typa1yaaa/manipulation-detector-backend:latest
 
     ports:
       - "8000:8000"
@@ -31,13 +9,6 @@ services:
       HF_HUB_DISABLE_XET: "1"
       HF_HUB_DOWNLOAD_TIMEOUT: "600"
       HF_HUB_ETAG_TIMEOUT: "60"
-
-    volumes:
-      - hf_cache:/root/.cache/huggingface
-
-    depends_on:
-      model-downloader:
-        condition: service_completed_successfully
 
     healthcheck:
       test:
@@ -49,16 +20,13 @@ services:
         ]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 30s
+      retries: 10
+      start_period: 120s
 
     restart: unless-stopped
 
-
   frontend:
-    build:
-      context: .
-      dockerfile: service/frontend/Dockerfile
+    image: ghcr.io/typa1yaaa/manipulation-detector-frontend:latest
 
     ports:
       - "8501:8501"
@@ -71,7 +39,3 @@ services:
         condition: service_healthy
 
     restart: unless-stopped
-
-
-volumes:
-  hf_cache:
